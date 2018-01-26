@@ -1,0 +1,32 @@
+version: '3.1'
+services:
+
+  mysql:
+    container_name: wordpress_mysql
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 2k2KQymPZ*n& # root password for local dev only
+      MYSQL_DATABASE: wordpress_test
+      MYSQL_USER: wordpress_user
+      MYSQL_PASSWORD: u9P^60XlM8BU # wordpress_user password for local dev only
+    volumes:
+      - ./wp-data:/docker-entrypoint-initdb.d
+
+  wordpress:
+    container_name: wordpress
+    image: wordpress
+    restart: always
+    depends_on:
+      - mysql
+    environment:
+      WORDPRESS_DB_PASSWORD: u9P^60XlM8BU # wordpress_user password for local dev only
+      WORDPRESS_DB_USER: wordpress_user
+      WORDPRESS_DB_NAME: wordpress_test
+    ports:
+      - 8080:80     
+    volumes:
+      - ./config/php.conf.uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+      # - ./rkw/:/var/www/html/wp-content/themes/rkw # Add your theme
+      # - ./plugin-name/:/var/www/html/wp-content/plugins/plugin-name # Add your plugin   
+
